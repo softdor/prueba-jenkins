@@ -42,7 +42,7 @@ pipeline {
 
                             # Run a new container with the new image
                             docker run -d --name ${CONTAINER_NAME} -p 5080:80 ${IMAGE_NAME}
-                        EOF
+EOF
                         """
                     }
                 }
