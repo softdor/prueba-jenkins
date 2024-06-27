@@ -16,17 +16,24 @@ pipeline {
                 git "${GIT_REPO_URL}"
             }
         }
- 
+
         stage('Build Image') {
-            app = docker.build('softdor/prueba-jenkins')
+            steps {
+                script {
+                    app = docker.build('softdor/prueba-jenkins')
+                }
+            }
         }
 
         stage('Push Image') {
-            docker.withRegistry('https://registry.hub.docker.com', 'git') {            
-                app.push("${env.BUILD_NUMBER}")            
-                app.push("latest") 
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'git') {            
+                        app.push("${env.BUILD_NUMBER}")            
+                        app.push("latest")
+                    }
+                }
             }
         }
     }
 }
-
