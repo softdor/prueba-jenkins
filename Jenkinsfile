@@ -5,7 +5,7 @@ pipeline {
         // Define variables
         REMOTE_HOST = 'jenkins.softdor.com'
         GIT_REPO_URL = 'https://github.com/softdor/prueba-jenkins.git'
-        IMAGE_NAME = 'web-simple'
+        IMAGE_NAME = 'softdor/web-simple'
         DOCKER_CREDENTIALS_ID = 'sd-docker-hub-credentials'
     }
 
@@ -19,7 +19,8 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                sh 'docker build -t softdor/web-simple .'
+                sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                sh "docker tag ${IMAGE_NAME}:${env.BUILD_NUMBER} ${IMAGE_NAME}:latest"
             }
         }
 
@@ -27,9 +28,9 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        def dockerImage = docker.image("${IMAGE_NAME}")
-                        dockerImage.push("${env.BUILD_NUMBER}")
-                        dockerImage.push("latest")
+                        def dockerImage = docker.image("${IMAGE_NAME}:${env.BUILD_NUMBER}")
+                        dockerImage.push()
+                        dockerImage.push('latest')
                     }
                 }
             }
