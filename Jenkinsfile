@@ -19,9 +19,7 @@ pipeline {
 
         stage('Build Image') {
             steps {
-                script {
-                    app = docker.build('softdor/prueba-jenkins')
-                }
+                sh 'docker build -t softdor/web-simple .'
             }
         }
 
