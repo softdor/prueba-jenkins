@@ -10,15 +10,10 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Build Image') {
             steps {
                 // Checkout code to Jenkins workspace
                 git "${GIT_REPO_URL}"
-            }
-        }
-
-        stage('Build Image') {
-            steps {
                 sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."
                 sh "docker tag ${IMAGE_NAME}:${env.BUILD_NUMBER} ${IMAGE_NAME}:latest"
             }
